@@ -1,0 +1,64 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "OpenParol Studio: build",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "OpenParol.Studio.slnx"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "OpenParol Studio: test",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "test",
+        "OpenParol.Studio.slnx",
+        "--no-restore"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": "test"
+    },
+    {
+      "label": "OpenParol Studio: run",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "src/OpenParol.Studio.App/OpenParol.Studio.App.csproj",
+        "--no-build"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "OpenParol Studio: format",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "format",
+        "OpenParol.Studio.slnx"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "OpenParol Studio: format check",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "format",
+        "OpenParol.Studio.slnx",
+        "--verify-no-changes"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

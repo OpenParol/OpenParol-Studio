@@ -1,0 +1,23 @@
+{
+  "dotnet.defaultSolution": "OpenParol.Studio.slnx",
+
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true
+  },
+
+  "files.watcherExclude": {
+    "**/bin/**": true,
+    "**/obj/**": true
+  },
+
+  "search.exclude": {
+    "**/bin": true,
+    "**/obj": true
+  }
+}

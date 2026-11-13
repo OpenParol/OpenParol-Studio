@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/OpenParol.Studio.App/OpenParol.Studio.App.csproj" />
+    <Project Path="src/OpenParol.Studio.Communication/OpenParol.Studio.Communication.csproj" />
+    <Project Path="src/OpenParol.Studio.Core/OpenParol.Studio.Core.csproj" />
+    <Project Path="src/OpenParol.Studio.Kinematics/OpenParol.Studio.Kinematics.csproj" />
+    <Project Path="src/OpenParol.Studio.Motion/OpenParol.Studio.Motion.csproj" />
+    <Project Path="src/OpenParol.Studio.Protocol/OpenParol.Studio.Protocol.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OpenParol.Studio.Kinematics.Tests/OpenParol.Studio.Kinematics.Tests.csproj" />
+    <Project Path="tests/OpenParol.Studio.Motion.Tests/OpenParol.Studio.Motion.Tests.csproj" />
+    <Project Path="tests/OpenParol.Studio.Protocol.Tests/OpenParol.Studio.Protocol.Tests.csproj" />
+  </Folder>
+</Solution>
