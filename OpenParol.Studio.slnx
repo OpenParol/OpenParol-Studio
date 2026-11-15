@@ -8,6 +8,7 @@
     <Project Path="src/OpenParol.Studio.Protocol/OpenParol.Studio.Protocol.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/OpenParol.Studio.Core.Tests/OpenParol.Studio.Core.Tests.csproj" />
     <Project Path="tests/OpenParol.Studio.Kinematics.Tests/OpenParol.Studio.Kinematics.Tests.csproj" />
     <Project Path="tests/OpenParol.Studio.Motion.Tests/OpenParol.Studio.Motion.Tests.csproj" />
     <Project Path="tests/OpenParol.Studio.Protocol.Tests/OpenParol.Studio.Protocol.Tests.csproj" />
