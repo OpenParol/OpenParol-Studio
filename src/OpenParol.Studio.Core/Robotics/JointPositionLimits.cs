@@ -38,7 +38,7 @@ public readonly record struct JointPositionLimits
         {
             throw new ArgumentException(
                 "The minimum joint position cannot be greater "
-              + "than the maximum joint position.",
+                + "than the maximum joint position.",
                 nameof(minimum)
             );
         }
