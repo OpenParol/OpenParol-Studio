@@ -125,6 +125,7 @@ public sealed class ForwardKinematicsSolverTests
         var model = new RobotKinematicModel(
             joints,
             RigidTransform.Identity,
+            RigidTransform.Identity,
             RigidTransform.Identity
         );
 
@@ -174,6 +175,7 @@ public sealed class ForwardKinematicsSolverTests
         var model = new RobotKinematicModel(
             joints,
             RigidTransform.Identity,
+            RigidTransform.Identity,
             RigidTransform.Identity
         );
 
@@ -217,6 +219,7 @@ public sealed class ForwardKinematicsSolverTests
         var model = new RobotKinematicModel(
             joints,
             RigidTransform.Identity,
+            RigidTransform.Identity,
             RigidTransform.Identity
         );
 
@@ -252,6 +255,7 @@ public sealed class ForwardKinematicsSolverTests
         var model = new RobotKinematicModel(
             joints,
             RigidTransform.Identity,
+            RigidTransform.Identity,
             RigidTransform.Identity
         );
 
@@ -282,6 +286,7 @@ public sealed class ForwardKinematicsSolverTests
         var model = new RobotKinematicModel(
             CreateIdentityJoints(),
             baseTransform,
+            RigidTransform.Identity,
             RigidTransform.Identity
         );
 
@@ -314,6 +319,81 @@ public sealed class ForwardKinematicsSolverTests
     }
 
     [Fact]
+    public void LastLinkToFlangeIsAppliedAfterCompleteJointChain()
+    {
+        var lastLinkToFlange =
+            RigidTransform.FromTranslation(
+                new Vector3D(0.0, 0.0, 0.0505)
+            );
+
+        var model = new RobotKinematicModel(
+            CreateIdentityJoints(),
+            RigidTransform.Identity,
+            lastLinkToFlange,
+            RigidTransform.Identity
+        );
+
+        var solver = new ForwardKinematicsSolver(model);
+        var result = solver.Calculate(ZeroJointVector());
+
+        AssertVectorApproximatelyEqual(
+            Vector3D.Zero,
+            result.WorldToLinkFrames[5].Translation
+        );
+
+        AssertVectorApproximatelyEqual(
+            new Vector3D(0.0, 0.0, 0.0505),
+            result.WorldToFlange.Translation
+        );
+
+        AssertVectorApproximatelyEqual(
+            result.WorldToFlange.Translation,
+            result.WorldToTool.Translation
+        );
+    }
+
+    [Fact]
+    public void LastLinkToFlangeUsesLastLinkLocalCoordinates()
+    {
+        var joints = CreateIdentityJoints();
+
+        joints[5] = CreateJoint(
+            name: "J6",
+            axis: new Vector3D(0.0, 1.0, 0.0)
+        );
+
+        var lastLinkToFlange =
+            RigidTransform.FromTranslation(
+                new Vector3D(0.0, 0.0, 0.0505)
+            );
+
+        var model = new RobotKinematicModel(
+            joints,
+            RigidTransform.Identity,
+            lastLinkToFlange,
+            RigidTransform.Identity
+        );
+
+        var solver = new ForwardKinematicsSolver(model);
+
+        var positions = new JointVector(
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            Math.PI / 2.0
+        );
+
+        var result = solver.Calculate(positions);
+
+        AssertVectorApproximatelyEqual(
+            new Vector3D(0.0505, 0.0, 0.0),
+            result.WorldToFlange.Translation
+        );
+    }
+
+    [Fact]
     public void FlangeToToolIsAppliedAfterCompleteJointChain()
     {
         var joints = CreateIdentityJoints();
@@ -330,6 +410,7 @@ public sealed class ForwardKinematicsSolverTests
 
         var model = new RobotKinematicModel(
             joints,
+            RigidTransform.Identity,
             RigidTransform.Identity,
             flangeToTool
         );
@@ -366,6 +447,7 @@ public sealed class ForwardKinematicsSolverTests
             RigidTransform.FromTranslation(
                 new Vector3D(1.0, 2.0, 3.0)
             ),
+            RigidTransform.Identity,
             RigidTransform.FromTranslation(
                 new Vector3D(0.0, 0.0, 0.5)
             )
@@ -486,6 +568,7 @@ public sealed class ForwardKinematicsSolverTests
     {
         return new RobotKinematicModel(
             CreateIdentityJoints(),
+            RigidTransform.Identity,
             RigidTransform.Identity,
             RigidTransform.Identity
         );

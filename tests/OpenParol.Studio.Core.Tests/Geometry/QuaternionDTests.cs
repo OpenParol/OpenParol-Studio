@@ -234,25 +234,6 @@ public sealed class QuaternionDTests
             result);
     }
 
-    private static void AssertQuaternionApproximatelyEqual(
-        QuaternionD expected,
-        QuaternionD actual)
-    {
-        Assert.Equal(expected.X, actual.X, Precision);
-        Assert.Equal(expected.Y, actual.Y, Precision);
-        Assert.Equal(expected.Z, actual.Z, Precision);
-        Assert.Equal(expected.W, actual.W, Precision);
-    }
-
-    private static void AssertVectorApproximatelyEqual(
-        Vector3D expected,
-        Vector3D actual)
-    {
-        Assert.Equal(expected.X, actual.X, Precision);
-        Assert.Equal(expected.Y, actual.Y, Precision);
-        Assert.Equal(expected.Z, actual.Z, Precision);
-    }
-
     [Fact]
     public void RotateNormalizesQuaternionBeforeApplyingRotation()
     {
@@ -301,6 +282,243 @@ public sealed class QuaternionDTests
 
         Assert.Throws<InvalidOperationException>(
             () => quaternion.Rotate(vector)
+        );
+    }
+
+    [Fact]
+    public void FromRollPitchYawReturnsIdentityForZeroAngles()
+    {
+        var result = QuaternionD.FromRollPitchYaw(
+            0.0,
+            0.0,
+            0.0
+        );
+
+        AssertQuaternionApproximatelyEquivalent(
+            QuaternionD.Identity,
+            result
+        );
+    }
+
+    [Fact]
+    public void FromRollPitchYawCreatesRollAroundXAxis()
+    {
+        var rotation = QuaternionD.FromRollPitchYaw(
+            Math.PI / 2.0,
+            0.0,
+            0.0
+        );
+
+        var result = rotation.Rotate(
+            new Vector3D(0.0, 1.0, 0.0)
+        );
+
+        AssertVectorApproximatelyEqual(
+            new Vector3D(0.0, 0.0, 1.0),
+            result
+        );
+    }
+
+    [Fact]
+    public void FromRollPitchYawCreatesPitchAroundYAxis()
+    {
+        var rotation = QuaternionD.FromRollPitchYaw(
+            0.0,
+            Math.PI / 2.0,
+            0.0
+        );
+
+        var result = rotation.Rotate(
+            new Vector3D(0.0, 0.0, 1.0)
+        );
+
+        AssertVectorApproximatelyEqual(
+            new Vector3D(1.0, 0.0, 0.0),
+            result
+        );
+    }
+
+    [Fact]
+    public void FromRollPitchYawCreatesYawAroundZAxis()
+    {
+        var rotation = QuaternionD.FromRollPitchYaw(
+            0.0,
+            0.0,
+            Math.PI / 2.0
+        );
+
+        var result = rotation.Rotate(
+            new Vector3D(1.0, 0.0, 0.0)
+        );
+
+        AssertVectorApproximatelyEqual(
+            new Vector3D(0.0, 1.0, 0.0),
+            result
+        );
+    }
+
+    [Fact]
+    public void FromRollPitchYawAppliesRollThenPitchThenYaw()
+    {
+        const double roll = 0.35;
+        const double pitch = -0.72;
+        const double yaw = 1.13;
+
+        var rollRotation = QuaternionD.FromAxisAngle(
+            new Vector3D(1.0, 0.0, 0.0),
+            roll
+        );
+
+        var pitchRotation = QuaternionD.FromAxisAngle(
+            new Vector3D(0.0, 1.0, 0.0),
+            pitch
+        );
+
+        var yawRotation = QuaternionD.FromAxisAngle(
+            new Vector3D(0.0, 0.0, 1.0),
+            yaw
+        );
+
+        var expected =
+            yawRotation
+            * pitchRotation
+            * rollRotation;
+
+        var actual = QuaternionD.FromRollPitchYaw(
+            roll,
+            pitch,
+            yaw
+        );
+
+        AssertQuaternionApproximatelyEquivalent(
+            expected,
+            actual
+        );
+    }
+
+    [Fact]
+    public void FromRollPitchYawReturnsNormalizedQuaternion()
+    {
+        var result = QuaternionD.FromRollPitchYaw(
+            0.35,
+            -0.72,
+            1.13
+        );
+
+        Assert.Equal(
+            1.0,
+            result.Length,
+            Precision
+        );
+    }
+
+    [Theory]
+    [InlineData(double.NaN)]
+    [InlineData(double.PositiveInfinity)]
+    [InlineData(double.NegativeInfinity)]
+    public void FromRollPitchYawThrowsForInvalidRoll(
+        double roll)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(
+            () => QuaternionD.FromRollPitchYaw(
+                roll,
+                0.0,
+                0.0
+            )
+        );
+    }
+
+    [Theory]
+    [InlineData(double.NaN)]
+    [InlineData(double.PositiveInfinity)]
+    [InlineData(double.NegativeInfinity)]
+    public void FromRollPitchYawThrowsForInvalidPitch(
+        double pitch)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(
+            () => QuaternionD.FromRollPitchYaw(
+                0.0,
+                pitch,
+                0.0
+            )
+        );
+    }
+
+    [Theory]
+    [InlineData(double.NaN)]
+    [InlineData(double.PositiveInfinity)]
+    [InlineData(double.NegativeInfinity)]
+    public void FromRollPitchYawThrowsForInvalidYaw(
+        double yaw)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(
+            () => QuaternionD.FromRollPitchYaw(
+                0.0,
+                0.0,
+                yaw
+            )
+        );
+    }
+
+    private static void AssertQuaternionApproximatelyEqual(
+        QuaternionD expected,
+        QuaternionD actual)
+    {
+        Assert.Equal(expected.X, actual.X, Precision);
+        Assert.Equal(expected.Y, actual.Y, Precision);
+        Assert.Equal(expected.Z, actual.Z, Precision);
+        Assert.Equal(expected.W, actual.W, Precision);
+    }
+
+    private static void AssertVectorApproximatelyEqual(
+        Vector3D expected,
+        Vector3D actual)
+    {
+        Assert.Equal(expected.X, actual.X, Precision);
+        Assert.Equal(expected.Y, actual.Y, Precision);
+        Assert.Equal(expected.Z, actual.Z, Precision);
+    }
+
+    private static void AssertQuaternionApproximatelyEquivalent(
+        QuaternionD expected,
+        QuaternionD actual)
+    {
+        var directDifference = ComponentDifference(
+            expected,
+            actual
+        );
+
+        var negatedDifference = ComponentDifference(
+            expected,
+            new QuaternionD(
+                -actual.X,
+                -actual.Y,
+                -actual.Z,
+                -actual.W
+            )
+        );
+
+        Assert.True(
+            Math.Min(directDifference, negatedDifference)
+                < Math.Pow(10.0, -Precision),
+            $"Expected orientation equivalent to {expected}, "
+                + $"but received {actual}."
+        );
+    }
+
+    private static double ComponentDifference(
+        QuaternionD left,
+        QuaternionD right)
+    {
+        return Math.Max(
+            Math.Max(
+                Math.Abs(left.X - right.X),
+                Math.Abs(left.Y - right.Y)
+            ),
+            Math.Max(
+                Math.Abs(left.Z - right.Z),
+                Math.Abs(left.W - right.W)
+            )
         );
     }
 }

@@ -66,7 +66,7 @@ public sealed class ForwardKinematicsSolver
             linkFrames[i] = current;
         }
 
-        var worldToFlange = current;
+        var worldToFlange = current * _model.LastLinkToFlange;
 
         var worldToTool = worldToFlange * _model.FlangeToTool;
 

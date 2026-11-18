@@ -72,6 +72,61 @@ public readonly record struct QuaternionD(
         );
     }
 
+    public static QuaternionD FromRollPitchYaw(
+        double roll,
+        double pitch,
+        double yaw)
+    {
+        if (!double.IsFinite(roll))
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(roll),
+                roll,
+                "The roll angle must be finite."
+            );
+        }
+
+        if (!double.IsFinite(pitch))
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(pitch),
+                pitch,
+                "The pitch angle must be finite."
+            );
+        }
+
+        if (!double.IsFinite(yaw))
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(yaw),
+                yaw,
+                "The yaw angle must be finite."
+            );
+        }
+
+        var rollRotation = FromAxisAngle(
+            new Vector3D(1.0, 0.0, 0.0),
+            roll
+        );
+
+        var pitchRotation = FromAxisAngle(
+            new Vector3D(0.0, 1.0, 0.0),
+            pitch
+        );
+
+        var yawRotation = FromAxisAngle(
+            new Vector3D(0.0, 0.0, 1.0),
+            yaw
+        );
+
+        return (
+            yawRotation
+            * pitchRotation
+            * rollRotation
+        ).Normalize();
+    }
+
+
     public static QuaternionD FromAxisAngle(
         Vector3D axis,
         double angle)

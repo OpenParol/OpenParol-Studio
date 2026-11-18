@@ -15,11 +15,14 @@ public sealed class RobotKinematicModel
 
     public RigidTransform BaseTransform { get; }
 
+    public RigidTransform LastLinkToFlange { get; }
+
     public RigidTransform FlangeToTool { get; }
 
     public RobotKinematicModel(
         IEnumerable<RevoluteJointDefinition> joints,
         RigidTransform baseTransform,
+        RigidTransform lastLinkToFlange,
         RigidTransform flangeToTool)
     {
         ArgumentNullException.ThrowIfNull(joints);
@@ -61,6 +64,7 @@ public sealed class RobotKinematicModel
 
         _joints = Array.AsReadOnly(jointArray);
         BaseTransform = baseTransform;
+        LastLinkToFlange = lastLinkToFlange;
         FlangeToTool = flangeToTool;
     }
 }

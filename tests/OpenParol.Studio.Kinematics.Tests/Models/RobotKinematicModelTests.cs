@@ -24,6 +24,7 @@ public sealed class RobotKinematicModelTests
         var model = new RobotKinematicModel(
             joints,
             baseTransform,
+            RigidTransform.Identity,
             flangeToTool
         );
 
@@ -40,6 +41,7 @@ public sealed class RobotKinematicModelTests
         var model = new RobotKinematicModel(
             joints,
             RigidTransform.Identity,
+            RigidTransform.Identity,
             RigidTransform.Identity
         );
 
@@ -54,6 +56,7 @@ public sealed class RobotKinematicModelTests
         Assert.Throws<ArgumentNullException>(
             () => new RobotKinematicModel(
                 null!,
+                RigidTransform.Identity,
                 RigidTransform.Identity,
                 RigidTransform.Identity
             )
@@ -76,6 +79,7 @@ public sealed class RobotKinematicModelTests
             () => new RobotKinematicModel(
                 joints,
                 RigidTransform.Identity,
+                RigidTransform.Identity,
                 RigidTransform.Identity
             )
         );
@@ -90,6 +94,7 @@ public sealed class RobotKinematicModelTests
         Assert.Throws<ArgumentException>(
             () => new RobotKinematicModel(
                 joints,
+                RigidTransform.Identity,
                 RigidTransform.Identity,
                 RigidTransform.Identity
             )
@@ -106,6 +111,7 @@ public sealed class RobotKinematicModelTests
             () => new RobotKinematicModel(
                 joints,
                 RigidTransform.Identity,
+                RigidTransform.Identity,
                 RigidTransform.Identity
             )
         );
@@ -120,6 +126,7 @@ public sealed class RobotKinematicModelTests
         Assert.Throws<ArgumentException>(
             () => new RobotKinematicModel(
                 joints,
+                RigidTransform.Identity,
                 RigidTransform.Identity,
                 RigidTransform.Identity
             )
